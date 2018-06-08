@@ -1,0 +1,11 @@
+import("math.lib");
+fc = hslider("freq",0,0,20000,1);
+bw = hslider("bw",10,0.1,20000,1);
+r = 1 / tan(PI*bw/SR);
+cost = cos(2*PI*fc/SR);
+a0 = 1/(1 + r);
+a1 = -a0*cost;
+a2 = r;
+b1 = -a1;
+b2 = -a0*(1 - r);
+process = _ + (_ <: *(a0) + (a1*_' <: (_ + a2*_'))) ~ (_ <: (*(b1) + b2*_'));
